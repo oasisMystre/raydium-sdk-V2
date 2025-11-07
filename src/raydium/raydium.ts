@@ -3,20 +3,13 @@ import { merge } from "lodash";
 
 import { Api, API_URL_CONFIG, ApiV3TokenRes, ApiV3Token, JupTokenType, AvailabilityCheckAPI3 } from "../api";
 import { EMPTY_CONNECTION, EMPTY_OWNER } from "../common/error";
-import { createLogger, Logger } from "../common/logger";
 import { Owner } from "../common/owner";
 import { Cluster } from "../solana";
 
 import Account, { TokenAccountDataProp } from "./account/account";
-import Farm from "./farm/farm";
-import Liquidity from "./liquidity/liquidity";
 import { Clmm } from "./clmm";
 import Cpmm from "./cpmm/cpmm";
-import TradeV2 from "./tradeV2/trade";
 import Utils1216 from "./utils1216";
-import MarketV2 from "./marketV2";
-import Ido from "./ido";
-import Launchpad from "./launchpad/launchpad";
 
 import TokenModule from "./token/token";
 import { SignAllTransactions } from "./type";
@@ -69,17 +62,11 @@ interface ApiData {
 
 export class Raydium {
   public cluster: Cluster;
-  public farm: Farm;
   public account: Account;
-  public liquidity: Liquidity;
   public clmm: Clmm;
   public cpmm: Cpmm;
-  public tradeV2: TradeV2;
   public utils1216: Utils1216;
-  public marketV2: MarketV2;
-  public ido: Ido;
   public token: TokenModule;
-  public launchpad: Launchpad;
   public rawBalances: Map<string, string> = new Map();
   public apiData: ApiData;
   public availability: Partial<AvailabilityCheckAPI3>;
@@ -91,7 +78,6 @@ export class Raydium {
   public api: Api;
   private _apiCacheTime: number;
   private _signAllTransactions?: SignAllTransactions;
-  private logger: Logger;
   private _chainTime?: {
     fetched: number;
     value: {
@@ -126,26 +112,19 @@ export class Raydium {
 
     this.api = api;
     this._apiCacheTime = apiCacheTime || 5 * 60 * 1000;
-    this.logger = createLogger("Raydium");
-    this.farm = new Farm({ scope: this, moduleName: "Raydium_Farm" });
     this.account = new Account({
       scope: this,
       moduleName: "Raydium_Account",
       tokenAccounts: config.tokenAccounts,
       tokenAccountRawInfos: config.tokenAccountRawInfos,
     });
-    this.liquidity = new Liquidity({ scope: this, moduleName: "Raydium_LiquidityV2" });
     this.token = new TokenModule({ scope: this, moduleName: "Raydium_tokenV2" });
-    this.tradeV2 = new TradeV2({ scope: this, moduleName: "Raydium_tradeV2" });
     this.clmm = new Clmm({ scope: this, moduleName: "Raydium_clmm" });
     this.cpmm = new Cpmm({ scope: this, moduleName: "Raydium_cpmm" });
     this.utils1216 = new Utils1216({ scope: this, moduleName: "Raydium_utils1216" });
-    this.marketV2 = new MarketV2({ scope: this, moduleName: "Raydium_marketV2" });
-    this.ido = new Ido({ scope: this, moduleName: "Raydium_ido" });
-    this.launchpad = new Launchpad({ scope: this, moduleName: "Raydium_lauchpad" });
 
     this.availability = {};
-    const now = new Date().getTime();
+    const now = Date.now();
     this.apiData = {};
 
     if (defaultChainTimeOffset)
@@ -222,7 +201,7 @@ export class Raydium {
   }
 
   private isCacheInvalidate(time: number): boolean {
-    return new Date().getTime() - time > this._apiCacheTime;
+    return Date.now() - time > this._apiCacheTime;
   }
 
   public async fetchChainTime(): Promise<void> {

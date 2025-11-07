@@ -1,5 +1,3 @@
-import { FarmRewardInfo, FarmVersion } from "../raydium/farm";
-
 /* ================= liquidity ================= */
 export type LiquidityVersion = 4 | 5;
 
@@ -30,32 +28,6 @@ export interface ApiPoolInfoV4 {
   marketAsks: string;
   marketEventQueue: string;
   lookupTableAccount: string;
-}
-
-/* ================= farm ================= */
-export interface FarmRewardInfoV6 {
-  rewardMint: string;
-  rewardVault: string;
-  rewardOpenTime: number;
-  rewardEndTime: number;
-  rewardPerSecond: number;
-  rewardSender: string;
-}
-
-export interface ApiStakePoolInfo {
-  // base
-  id: string;
-  symbol: string;
-  lpMint: string;
-  // version
-  version: FarmVersion;
-  programId: string;
-  // keys
-  authority: string;
-  lpVault: string;
-  rewardInfos: FarmRewardInfo[] | FarmRewardInfoV6[];
-  // status
-  upcoming: boolean;
 }
 
 export interface ApiClmmConfigInfo {

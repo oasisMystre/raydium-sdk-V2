@@ -1,4 +1,4 @@
-import axios, { AxiosInstance } from "axios";
+import xior, { XiorInstance } from "xior";
 
 import { createLogger, sleep } from "../common";
 import { Cluster } from "../solana";
@@ -22,7 +22,6 @@ import { API_URLS, API_URL_CONFIG, DEV_API_URLS } from "./url";
 import { updateReqHistory } from "./utils";
 import { PublicKey } from "@solana/web3.js";
 import { solToWSol } from "../common";
-import { TOKEN_2022_PROGRAM_ID, TOKEN_PROGRAM_ID } from "@solana/spl-token";
 
 const logger = createLogger("Raydium_Api");
 const poolKeysCache: Map<string, PoolKeys> = new Map();
@@ -55,7 +54,7 @@ export interface ApiProps {
 export class Api {
   public cluster: Cluster;
 
-  public api: AxiosInstance;
+  public api: XiorInstance;
   public logCount: number;
 
   public urlConfigs: API_URL_CONFIG;
@@ -65,7 +64,7 @@ export class Api {
     this.urlConfigs = urlConfigs || {};
     this.logCount = logCount || 1000;
 
-    this.api = axios.create({
+    this.api = xior.create({
       baseURL: this.urlConfigs.BASE_HOST || (this.cluster === "devnet" ? DEV_API_URLS.BASE_HOST : API_URLS.BASE_HOST),
       timeout,
     });
@@ -109,21 +108,21 @@ export class Api {
       (error) => {
         // https://axios-http.com/docs/handling_errors
         // not 2xx
-        const { config, response = {} } = error;
-        const { status } = response;
-        const { method, baseURL, url } = config;
+        const { config, response } = error;
+        const { status } = response!;
+        const { method, baseURL, url } = config!;
 
         if (logRequests) {
           updateReqHistory({
             status,
             url: `${baseURL}${url}`,
-            params: config.params,
+            params: config?.params,
             data: error.message,
             logCount: this.logCount,
           });
         }
 
-        logger.error(`${method.toUpperCase()} ${baseURL}${url} ${status || error.message}`);
+        logger.error(`${method?.toUpperCase()} ${baseURL}${url} ${status || error.message}`);
 
         return Promise.reject(error);
       },
@@ -153,12 +152,12 @@ export class Api {
       id: string;
       jsonrpc: string;
       result: { numSlots: number; numTransactions: number; samplePeriodSecs: number; slot: number }[];
-    } = await axios.post(endpointUrl, {
+    } = await xior.post(endpointUrl, {
       id: "getRecentPerformanceSamples",
       jsonrpc: "2.0",
       method: "getRecentPerformanceSamples",
       params: [4],
-    });
+    }).then(({data}) => data);
     const slotList = res.result.map((data) => data.numSlots);
     return slotList.reduce((a, b) => a + b, 0) / slotList.length / 60;
   }
@@ -172,7 +171,7 @@ export class Api {
     rpcs: { batch: boolean; name: string; url: string; weight: number }[];
     strategy: string;
   }> {
-    return this.api.get(this.urlConfigs.RPCS || API_URLS.RPCS);
+    return this.api.get(this.urlConfigs.RPCS || API_URLS.RPCS).then(({data}) => data);
   }
 
   async getTokenList(): Promise<{ mintList: ApiV3Token[]; blacklist: string[]; whiteList: string[] }> {
@@ -190,7 +189,7 @@ export class Api {
   > {
     const r: JupToken[] = await this.api.get("", {
       baseURL: this.urlConfigs.JUP_TOKEN_LIST || API_URLS.JUP_TOKEN_LIST,
-    });
+    }).then(({data}) => data);
     return r.map((t) => ({
       ...t,
       chainId: 101,
