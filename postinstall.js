@@ -37,8 +37,8 @@ function runBuild() {
     if (isInstallingAsDependency) {
       console.log('Building package from git...');
       
-      const buildCommand = packageManager === 'npm' 
-        ? 'npm run build'
+      const buildCommand =  ['npm', 'bun'].includes(packageManager)
+        ? `${packageManager} run build`
         : `${packageManager} build`;
       
       execSync(buildCommand, { 
