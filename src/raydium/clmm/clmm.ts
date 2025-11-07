@@ -233,12 +233,10 @@ export class Clmm extends ModuleBase {
         owner: this.scope.ownerPubKey,
 
         createInfo:
-          mintAUseSOLBalance || amountA.isZero()
-            ? {
-                payer: this.scope.ownerPubKey,
-                amount: amountA,
-              }
-            : undefined,
+        {
+            payer: this.scope.ownerPubKey,
+            amount: amountA,
+        },
         skipCloseAccount: !mintAUseSOLBalance,
         notUseTokenAccount: mintAUseSOLBalance,
         associatedOnly: mintAUseSOLBalance ? false : associatedOnly,
@@ -254,12 +252,10 @@ export class Clmm extends ModuleBase {
         owner: this.scope.ownerPubKey,
 
         createInfo:
-          mintBUseSOLBalance || amountB.isZero()
-            ? {
-                payer: this.scope.ownerPubKey!,
-                amount: amountB,
-              }
-            : undefined,
+        {
+            payer: this.scope.ownerPubKey!,
+            amount: amountB,
+        },
         skipCloseAccount: !mintBUseSOLBalance,
         notUseTokenAccount: mintBUseSOLBalance,
         associatedOnly: mintBUseSOLBalance ? false : associatedOnly,
@@ -339,13 +335,10 @@ export class Clmm extends ModuleBase {
         owner: this.scope.ownerPubKey,
 
         createInfo:
-          mintAUseSOLBalance || amountMaxA.isZero()
-            ? {
-                payer: this.scope.ownerPubKey,
-                amount: amountMaxA,
-              }
-            : undefined,
-
+        {
+            payer: this.scope.ownerPubKey,
+            amount: amountMaxA,
+        },
         skipCloseAccount: !mintAUseSOLBalance,
         notUseTokenAccount: mintAUseSOLBalance,
         associatedOnly: mintAUseSOLBalance ? false : associatedOnly,
@@ -361,12 +354,10 @@ export class Clmm extends ModuleBase {
         owner: this.scope.ownerPubKey,
 
         createInfo:
-          mintBUseSOLBalance || amountMaxB.isZero()
-            ? {
-                payer: this.scope.ownerPubKey!,
-                amount: amountMaxB,
-              }
-            : undefined,
+        {
+            payer: this.scope.ownerPubKey!,
+            amount: amountMaxB,
+        },
         skipCloseAccount: !mintBUseSOLBalance,
         notUseTokenAccount: mintBUseSOLBalance,
         associatedOnly: mintBUseSOLBalance ? false : associatedOnly,
