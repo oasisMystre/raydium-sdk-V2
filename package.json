@@ -34,7 +34,7 @@
     "build-lib": "rm -rf lib && tsup src --format cjs,esm --dts --sourcemap --no-splitting --minify -d lib --silent",
     "build-all": "yarn build-dist && yarn build-lib",
     "build": "yarn build-lib",
-    "postinstall": "node postinstall.js",
+    "postinstall": "rm -rf lib && tsup src --format cjs,esm --dts --sourcemap --no-splitting --minify -d lib --silent",
     "push": "yarn build && yarn publish",
     "prepare": "husky install && node postinstall.js",
     "dev": "ts-node -r tsconfig-paths/register",
