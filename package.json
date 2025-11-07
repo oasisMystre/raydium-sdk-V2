@@ -1,7 +1,9 @@
 {
-  "name": "@raydium-io/raydium-sdk-v2",
-  "version": "0.2.30-alpha",
-  "type": "module",
+  "name": "@oasismystre/raydium-sdk-v2",
+  "version": "0.0.0",
+  "publishConfig": {
+    "access":"public"
+  },
   "description": "An SDK for building applications on top of Raydium.",
   "license": "GPL-3.0",
   "main": "./lib/index.js",
@@ -27,18 +29,8 @@
   },
   "scripts": {
     "lint": "eslint src/**/*.ts",
-    "test": "jest",
-    "build-docs": "typedoc",
-    "build-docs-watch": "typedoc --watch",
-    "build-dist": "rm -rf dist && mkdir dist && yarn build-docs",
-    "build-lib": "rm -rf lib && tsup src --format cjs,esm --dts --sourcemap --no-splitting --minify -d lib --silent",
-    "build-all": "yarn build-dist && yarn build-lib",
-    "build": "yarn build-lib",
-    "postinstall": "rm -rf lib && tsup src --format cjs,esm --dts --sourcemap --no-splitting --minify -d lib --silent",
-    "push": "yarn build && yarn publish",
-    "prepare": "husky install && node postinstall.js",
-    "dev": "ts-node -r tsconfig-paths/register",
-    "watch": "rm -rf lib && tsup src --watch --format cjs,esm --dts --sourcemap --no-splitting --minify -d lib"
+    "prepublishOnly": "bun run build",
+    "build": "rm -rf lib && tsup src --format cjs,esm --dts --sourcemap --no-splitting --minify -d lib --silent"
   },
   "dependencies": {
     "@solana/buffer-layout": "^4.0.1",
