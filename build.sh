@@ -1,0 +1,1 @@
+npm pack && mkdir -p ../../rhiva-ag/bin && mv raydium-io-raydium-sdk-v2-*.tgz ../../rhiva-ag/bin

@@ -1,5 +1,5 @@
 import { Connection, Keypair, PublicKey, EpochInfo, Commitment } from "@solana/web3.js";
-import { merge } from "lodash";
+import merge from "lodash.merge";
 
 import { Api, API_URL_CONFIG, ApiV3TokenRes, ApiV3Token, JupTokenType, AvailabilityCheckAPI3 } from "../api";
 import { EMPTY_CONNECTION, EMPTY_OWNER } from "../common/error";

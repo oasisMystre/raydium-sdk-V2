@@ -11,7 +11,7 @@ import {
   TransactionMessage,
   VersionedTransaction,
 } from "@solana/web3.js";
-import axios from "axios";
+import xior from "xior";
 
 import { Api } from "../../api";
 import { ComputeBudgetConfig, SignAllTransactions, TxTipConfig } from "../../raydium/type";
@@ -180,7 +180,7 @@ export class TxBuilder {
 
   public async getComputeBudgetConfig(): Promise<ComputeBudgetConfig | undefined> {
     const json = (
-      await axios.get<SolanaFeeInfoJson>(`https://solanacompass.com/api/fees?cacheFreshTime=${5 * 60 * 1000}`)
+      await xior.get<SolanaFeeInfoJson>(`https://solanacompass.com/api/fees?cacheFreshTime=${5 * 60 * 1000}`)
     ).data;
     const { avg } = json?.[15] ?? {};
     if (!avg) return undefined;
@@ -406,7 +406,7 @@ export class TxBuilder {
               i++;
               let confirmed = false;
               // eslint-disable-next-line
-              let intervalId: NodeJS.Timer | null = null,
+              let intervalId: NodeJS.Timeout | null = null,
                 subSignatureId: number | null = null;
               const cbk = (signatureResult: SignatureResult): void => {
                 intervalId !== null && clearInterval(intervalId);
@@ -668,7 +668,7 @@ export class TxBuilder {
 
               let confirmed = false;
               // eslint-disable-next-line
-              let intervalId: NodeJS.Timer | null = null,
+              let intervalId: NodeJS.Timeout | null = null,
                 subSignatureId: number | null = null;
               const cbk = (signatureResult: SignatureResult): void => {
                 intervalId !== null && clearInterval(intervalId);
@@ -916,7 +916,7 @@ export class TxBuilder {
 
               let confirmed = false;
               // eslint-disable-next-line
-              let intervalId: NodeJS.Timer | null = null,
+              let intervalId: NodeJS.Timeout | null = null,
                 subSignatureId: number | null = null;
               const cbk = (signatureResult: SignatureResult): void => {
                 intervalId !== null && clearInterval(intervalId);
@@ -1209,7 +1209,7 @@ export class TxBuilder {
 
               let confirmed = false;
               // eslint-disable-next-line
-              let intervalId: NodeJS.Timer | null = null,
+              let intervalId: NodeJS.Timeout | null = null,
                 subSignatureId: number | null = null;
               const cbk = (signatureResult: SignatureResult): void => {
                 intervalId !== null && clearInterval(intervalId);
