@@ -30,7 +30,7 @@
   "scripts": {
     "lint": "eslint src/**/*.ts",
     "prepublishOnly": "bun run build",
-    "build": "rm -rf lib && tsup src --format cjs,esm --dts --sourcemap --no-splitting --minify -d lib --silent && ./build.sh"
+    "build": "rm -rf lib && tsup src --format cjs,esm --dts --sourcemap --no-splitting --minify -d lib --silent && chmod +x ./build.sh && ./build.sh"
   },
   "peerDependencies": {
     "bn.js": "^5.2.2",
